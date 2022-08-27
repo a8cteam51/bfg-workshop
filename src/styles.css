@@ -18,3 +18,11 @@ ul {
 ul li {
 	margin-bottom: 1rem;
 }
+
+a {
+	text-decoration: none;
+	transition: all 0.1s;
+}
+a:hover {
+	padding-left: 3px;
+}
