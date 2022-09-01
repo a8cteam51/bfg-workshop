@@ -22,8 +22,6 @@ There's an `.env` file that has been commited, exposing sensitive credentials to
 
 Additionally, there's another file `settings.json` that contains an API key. This file should not be deleted, but that API key needs to be removed, and obfuscated on the git history.
 
-TEST- REMOVE
-
 _
 
 ### Step 1: Check out the list of commits.
