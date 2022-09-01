@@ -35,7 +35,19 @@ Commits: [9a6e41b](https://github.com/a8cteam51/bfg-workshop/commit/9a6e41b5de39
 _
 
 ### Step 2: Delete file.
-[TBD]
+
+In this step we'll focus on removing the .env file we mistakenly committed to the branch along with it's commit history.
+
+First remove the file from your local repo and commit and push the changes to the remote repo.
+- Do this with `git rm .env`, then commit and push as normal.
+After the push, you'll notice the .env file is no longer in the repo on Github, however it and it's contents are still visible in some of the previous commits. Let's remove that history.
+
+Remove the commit history:
+- Use the following command: `bfg --delete-files .env`. The command will run, providing details of the clean-up operation, followed by the statement `BFG run is complete! When ready, run: git reflog...`.
+- Copy the command from the terminal and run it. (For reference, the command should be `git reflog expire --expire=now --all && git gc --prune=now --aggressive`).
+- Now force a push to the remote repository using `git push --force`.
+
+The file should now be removed from all commit history both locally, and in the remote repository. See Step 4 below for additional important information.
 
 –
 ### Step 3: Obfuscate text.
