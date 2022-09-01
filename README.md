@@ -53,21 +53,23 @@ The file should now be removed from all commit history both locally, and in the 
 ### Step 3: Obfuscate text.
 
 Now lets focus on how to remove a string from the `settings.json` file without actually removing the whole file from the history.
-- Create a  file called `replacements.txt` and populate it with the text that you want to obfuscate, one string per line. In our case, `replacements.txt` will only contain one single line:
+- First remove the offending text in the `settings.json` file by removing the value from the string, leaving an empty string is fine. Commit and push the change to the remote repository.
+- Create a file called `replacements.txt` in the git root directory and populate it with the text that you want to obfuscate, one string per line. In our case, `replacements.txt` will only contain one single line:
 ```
 07dba36e-0506-4230-ba5b-4e2fa87c546d==>0000
 ```
 This replaces the API string with `0000`
-- From the Terminal, run `bfg --replace-text ~/path/to/replacements.txt -fi '*.json'` 
-- On screen, check the files that are going to be changed. Make sure that only the files that you want will be modified.
-- Do a `git reflow` by following the steps on your Terminal
-- Execute `git push -f`
+- From the Terminal and in the git root directory, run `bfg --replace-text replacements.txt -fi '*.json'`. If you're in a different folder use the format `bfg --replace-text ~/path/to/replacements.txt -fi '*.json'` (replace `~/path/to/` with the actual path).
+- On screen, check the files that are going to be changed. Make sure that only the files that you want will be modified. 
+- Do a `git reflow ...` by following the command provided in your Terminal, the same as in Step 2 above.
+- Execute `git push -f` (same as `git push --force`).
+
+The API key value should now be removed from all commit history both locally and in the remote repository.
 
 –
-### Step 4: Avoid to push old branches.
-In a real-world scenario, you should let the team know that the scrubbing process is done and that they should do a `git pull` and either:
-- Delete their local branches
-- Rebase them from the updated `trunk`
+### Step 4: Avoid pushing from old branches.
+- In a real-world scenario, you should let the team know that the scrubbing process is done and they should delete their local branches and re-clone from the cleaned remote repo. Failure to do this could cause the removed history to be re-introduced. 
+- Additionally, while the content/file is removed, linking directly to the original commit (eg `github.com/username/repo-name/commit/652ac....194c`) will still show the content or file even though the commit is no longer included in our repo history, and anyone forking or cloning the repo won’t have this history or any reference to it. It is for this reason that any secrets that are committed to Github should be considered compromised, even if removed. 
 
 ---
 
@@ -81,6 +83,9 @@ https://fieldguide.automattic.com/scrubbing-a-repo-clean/
 
 - Sanitizing Repository History Using Tower and the BFG:   
 https://fieldguide.automattic.com/sanitizing-repository-history-using-tower-and-the-bfg/
+
+- Removing sensitive data from a repository:
+https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/removing-sensitive-data-from-a-repository
 
 - How to substitute text:   
 https://stackoverflow.com/a/15730571/1940238
