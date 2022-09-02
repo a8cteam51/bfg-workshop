@@ -9,8 +9,9 @@ By following the steps below, you will learn how to deal with this situation and
 ## Before you start
 
 1. Install BFG
-	- brew install bfg
-	- or, manually install it by downloading the .jar from the page.
+	- With Homebrew: `brew install bfg`
+	- For M1 chip: `arch -arm64 brew install bfg`
+	- or, manually install it by downloading the .jar from [their website](https://rtyley.github.io/bfg-repo-cleaner/).
 
 2. Fork this repository to your personal Github account so you can have your own sandbox to poke around.
 
