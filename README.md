@@ -11,7 +11,7 @@ By following the steps below, you will learn how to deal with this situation and
 1. Install BFG
 	- With Homebrew: `brew install bfg`
 	- For M1 chip: `arch -arm64 brew install bfg`
-	- or, manually install it by downloading the .jar from [their website](https://rtyley.github.io/bfg-repo-cleaner/).
+	- or, manually install it by downloading the .jar from [their website](https://rtyley.github.io/bfg-repo-cleaner/). See **Additional Information** below for more information.
 
 2. Fork this repository to your personal Github account so you can have your own sandbox to poke around.
 
@@ -68,8 +68,18 @@ The API key value should now be removed from all commit history both locally and
 
 –
 ### Step 4: Avoid pushing from old branches.
-- In a real-world scenario, you should let the team know that the scrubbing process is done and they should delete their local branches and re-clone from the cleaned remote repo. Failure to do this could cause the removed history to be re-introduced. 
-- Additionally, while the content/file is removed, linking directly to the original commit (eg `github.com/username/repo-name/commit/652ac....194c`) will still show the content or file even though the commit is no longer included in our repo history, and anyone forking or cloning the repo won’t have this history or any reference to it. It is for this reason that any secrets that are committed to Github should be considered compromised, even if removed. 
+- In a real-world scenario, you should let the team know that the scrubbing process is done and they should delete their local branches and re-clone/pull from the cleaned remote repo. Failure to do this could cause the removed history to be re-introduced.
+- If the leaked content was only on a single branch and you're ok to lose any local changes, or don't have any, then you can cleanly remove a local branch using the command `git branch -D <branch name>`. 
+- If on the other hand you have un-merged changes you don't want to lose, then you can rebase instead. **Warning:** Do not use a merge for this operation as it may reintroduce the removed history. Generally, from your base branch, say `trunk`, `git pull`, switch to your working branch `git checkout fix/something`, and rebase with `git rebase trunk`.
+ 
+
+–
+### Additional Information.
+- While the content/file is removed, linking directly to the original commit (eg `github.com/username/repo-name/commit/652ac....194c`) will still show the content or file even though the commit is no longer included in our repo history, and anyone forking or cloning the repo won’t have this history or any reference to it. It is for this reason that any secrets that are committed to Github should be considered compromised, even if removed.
+- To completely remove the content from Github after cleaning with BFG you need to contact Github. [Reference](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/removing-sensitive-data-from-a-repository#fully-removing-the-data-from-github).
+- Merged Branches - In a real-world scenario if you're removing files or text from a branch that's already been merged into another branch, you'll want to make sure you push your initial changes to those branches as well, before running the BFG commands. For example, you're removing a leaked file in the branch `fix/something`, and this was already merged to `trunk` before discovering the leak, you'll need to also merge the `fix/something` into `trunk` after your `git rm...` and commit/push. Alternatively, you can remove/make changes to each branch separately, then run BFG. When pushing the final history changes, you can use `git push --all --force`. This will force push the change to all branches. 
+- In case you are not running brew, or using another operating system, you will need to manually download and run the .jar BFG file. This will require Java to be installed if not already so, and is out of scope for this workshop. However, you might find some of the responses in [this Github issue thread](https://github.com/rtyley/bfg-repo-cleaner/issues/191#issuecomment-448731540) helpful. 
+- After running BFG you'll notice in your local repo a folder with the name format `<repo-name>.bfg-report`. It contains a somewhat criptic log of actions performed by BFG on the local repository. It's safe to remove this folder when you're finished using the BFG.
 
 ---
 
